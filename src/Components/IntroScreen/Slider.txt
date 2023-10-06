@@ -1,0 +1,197 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, StyleSheet, Image, FlatList, Dimensions } from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+const images = [
+  require('../../Images/Introassests/pic1.png'),
+  require('../../Images/Introassests/pic2.png'),
+  require('../../Images/Introassests/pic3.png'),
+  require('../../Images/Introassests/pic4.png'),
+];
+
+const texts = [
+  'Share a Snapshot of\n Your Home',
+  'Roof It Your Way,\n Right Away',
+  'Shape Your Roof, Shape \nYour Style',
+  'Coat Your Roof in a \n World of Hues',
+];
+
+const Slider = ({ navigation }) => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [currentImage, setCurrentImage] = useState(images[0]);
+  const [currentText, setCurrentText] = useState(texts[0]);
+  const intervalRef = useRef(null);
+  const isPaused = useRef(false);
+
+  const onIndexChanged = (index) => {
+    setActiveIndex(index);
+    setCurrentImage(images[index]);
+    setCurrentText(texts[index]);
+  };
+
+  useEffect(() => {
+    // Automatically change the slide every 2 seconds
+    intervalRef.current = setInterval(() => {
+      if (!isPaused.current) {
+        const newIndex = (activeIndex + 1) % images.length;
+        if (newIndex !== 0) {
+          onIndexChanged(newIndex);
+        } else {
+          clearInterval(intervalRef.current); // Stop the slideshow at the last index
+        }
+      }
+    }, 2000);
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, [activeIndex]);
+
+  // const pauseInterval = () => {
+  //   isPaused.current = true;
+  // };
+
+  // const resumeInterval = () => {
+  //   isPaused.current = false;
+  // };
+
+  const renderButton = () => (
+    <View style={styles.button} >
+      <Text style={styles.buttonText} onPress={() => navigation.navigate('UserSplash')}>Continue</Text>
+     
+    </View>
+  );
+
+  const renderItem = ({ item, index }) => (
+    <View
+      style={styles.slide}
+      // onTouchStart={pauseInterval}
+      // onTouchEnd={resumeInterval}
+    >
+      <Image
+        source={currentImage}
+        style={styles.image}
+        resizeMode="contain"
+        // tintColor={null} // Prevent color overlay when pressed
+      />
+
+      <View style={styles.overlayContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('../../../assets/logo.png')}
+            style={styles.logo}
+            resizeMode="contain"
+          />
+        </View>
+        <Text style={styles.slideText}>{currentText}</Text>
+        <View style={styles.dotsContainer}>
+          <View style={styles.dots}>
+            {images.map((_, dotIndex) => (
+              <View
+                key={dotIndex}
+                style={[
+                  styles.dot,
+                  { backgroundColor: activeIndex === dotIndex ? '#FF4848' : '#FFFFFF' },
+                ]}
+              />
+            ))}
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+
+  return (
+    <View style={styles.container}>
+      <FlatList
+        data={images}
+        renderItem={({ index }) => renderItem({ index })}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        keyExtractor={(item, index) => index.toString()}
+        onMomentumScrollEnd={(event) => {
+          const slideWidth = Dimensions.get('window').width;
+          const newIndex = Math.floor(
+            event.nativeEvent.contentOffset.x / slideWidth
+          );
+          onIndexChanged(newIndex);
+        }}
+      ></FlatList>
+      {renderButton()}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: 'absolute',
+    marginTop: hp('2%'),
+  },
+  slide: {
+    width: wp('100%'),
+    height: hp('75%'),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: hp('8%'),
+  },
+  image: {
+    width: wp('155%'),
+    height: hp('135%'),
+    marginTop: -hp('3.5%'),
+  },
+  overlayContainer: {
+    ...StyleSheet.absoluteFillObject,
+    position: 'absolute',
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginTop: -hp('16.5%'),
+    marginBottom: hp('1%'),
+  },
+  logo: {
+    width: wp('35%'),
+    height: hp('35%'),
+  },
+  dotsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  dots: {
+    flexDirection: 'row',
+  },
+  dot: {
+    width: wp('10%'),
+    height: hp('1%'),
+    borderRadius: 5,
+    marginHorizontal: wp('2%'),
+  },
+  button: {
+    backgroundColor: '#A14142',
+    paddingVertical: hp('1.7%'),
+    paddingHorizontal: wp('9.5%'),
+    borderRadius: 25,
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: -hp('6.5%'),
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: wp('4%'),
+    fontWeight: 'bold',
+  },
+  slideText: {
+    fontSize: wp('4%'),
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: hp('2%'),
+    marginTop: hp('32%'), 
+    color: 'white',
+  },
+});
+
+export default Slider;

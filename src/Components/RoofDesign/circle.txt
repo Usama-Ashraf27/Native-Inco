@@ -1,0 +1,85 @@
+import React, { useState } from 'react';
+import { View, Text, Dimensions, Image, StyleSheet } from 'react-native';
+import Carousel from 'react-native-snap-carousel';
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+const { width } = Dimensions.get('window');
+const itemWidth = width / 5;
+
+const Circle = () => {
+  const data = [
+    { id: '1', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 1' },
+    { id: '2', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 2' },
+    { id: '3', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 3' },
+    { id: '4', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 4' },
+    { id: '5', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 5' },
+    { id: '6', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 6' },
+  ];
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const renderCarouselItem = ({ item, index }) => {
+    const isCurrentItem = index === currentIndex;
+    const scale = isCurrentItem ? 1.3 : 1.0;
+    const opacity = isCurrentItem ? 1.0 : 0.5;
+
+    return (
+      <View style={styles.carouselItem}>
+        <View style={[styles.circularContainer, { transform: [{ scale }],width:hp('10%') }]}>
+          <Image source={item.source} style={styles.carouselImage} />
+        </View>
+        <Text style={[styles.imageText, { opacity }]}>{item.text}</Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <Carousel
+        data={data}
+        renderItem={renderCarouselItem}
+        sliderWidth={width}
+        itemWidth={itemWidth}
+        onSnapToItem={(index) => setCurrentIndex(index)}
+        loop
+        loopClonesPerSide={data.length}
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  carouselItem: {
+    width: itemWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  circularContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'lightgray',
+    width: itemWidth, // Adjust the size of the circular container
+    height: itemWidth, // Adjust the size of the circular container
+    borderRadius: itemWidth / 2, // Make it a perfect circle
+  },
+  carouselImage: {
+    width: '90%',
+    height: '60%', // Adjust the height for the image
+    resizeMode: 'contain',
+  },
+  imageText: {
+    marginTop: 6,
+    fontWeight: 'bold',
+    fontSize: 12,
+  },
+});
+
+export default Circle;

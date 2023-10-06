@@ -1,0 +1,162 @@
+import React, { useRef, useState } from 'react';
+import { StyleSheet, Text, View, ImageBackground, Image ,TouchableOpacity} from 'react-native';
+import Carousel from 'react-native-snap-carousel';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import Header from '../IntroScreen/Header';
+import { useNavigation } from '@react-navigation/native';
+
+const RoofDesign = () => {
+  const data = [
+    { id: '1', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 1' },
+    { id: '2', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 2' },
+    { id: '3', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 1' },
+    { id: '4', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 2' },
+    { id: '5', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 1' },
+    { id: '6', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 2' },
+    { id: '7', source: require('../../Images/RoofDesign/Bannet.png'), text: 'Image 1' },
+    { id: '8', source: require('../../Images/RoofDesign/Dutch.png'), text: 'Image 2' },
+  ];
+
+  const carouselRef = useRef(null);
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const navigation = useNavigation();
+  const renderItem = ({ item, index }) => {
+    // Calculate the rotation angle based on the active slide index
+    const rotationAngle = (index - activeSlideIndex) * 45;
+
+    return (
+      <View style={styles.gridItem}>
+        <View style={styles.circularContainer}>
+          <Image source={item.source} style={styles.imageItem} />
+        </View>
+        <Text style={styles.itemText}>{item.text}</Text>
+      </View>
+    );
+  };
+
+  return (
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('../../Images/UserData/House.png')}
+        resizeMode="cover"
+        style={styles.image}
+      >
+        <View style={styles.overlay}>
+          <Header />
+          <Text style={styles.text}>ROOF DESIGN</Text>
+        </View>
+      </ImageBackground>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.tinyLogo}
+          source={require('../../Images/logo.png')}
+        />
+      </View>
+      <View style={styles.carouselContainer}>
+        <Carousel
+          ref={carouselRef}
+          data={data}
+          renderItem={renderItem}
+          sliderWidth={wp('100%')}
+          itemWidth={wp('20%')}
+          layout={'default'}
+          loop
+          loopClonesPerSide={data.length}
+          onSnapToItem={(index) => setActiveSlideIndex(index)}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+      <TouchableOpacity
+  style={[
+    styles.button,
+    {
+      width: wp('70%'),
+      backgroundColor: '#A14142',
+      elevation: 8,
+      shadowColor: '#A14142',
+      shadowOpacity: 0.5,
+      shadowOffset: { width: 0, height: 2 },
+      shadowRadius: 2,
+    },
+  ]}
+  onPress={() => navigation.navigate('chooseTexture')}
+>
+  <Text style={styles.buttonText}>Continue</Text>
+</TouchableOpacity>
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  image: {
+    width: wp('100%'),
+    height: hp('60%'),
+  },
+  overlay: {
+    flex: 1,
+  },
+  text: {
+    fontSize: hp('2%'),
+    color: 'black',
+    position: 'absolute',
+    alignSelf: 'center',
+    marginTop: hp('6%'),
+  },
+  logoContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  tinyLogo: {
+    width: wp('25%'),
+    height: wp('25%'),
+    marginTop: hp('-6.5%'),
+  },
+  gridItem: {
+    alignItems: 'center',
+    margin: 10,
+  },
+  carouselContainer: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  circularContainer: {
+    width: wp('20%'), // Adjust the size of the circular container
+    height: wp('20%'), // Adjust the size of the circular container
+    borderRadius: wp('15%'), // Half of the width/height for a circular container
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white', // Add a background color if needed
+  },
+  imageItem: {
+    width: wp('22%'), // Adjust the width of the items
+    height: hp('10%'), // Adjust the height of the items
+    borderRadius: wp('20%'), // Half of the item width for circular effect
+  },
+  itemText: {
+    marginTop: 5,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    padding: 10,
+    borderRadius: 20,
+  },
+  buttonText: {
+    textAlign: 'center',
+    color:'white',
+    fontSize: hp('2.5%'), // Adjust the font size as needed
+  },
+});
+
+export default RoofDesign;
