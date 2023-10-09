@@ -6,6 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import Carousel from 'react-native-snap-carousel';
 
+
 const images = [
   require('../../Images/Introassests/pic-1.png'),
   require('../../Images/Introassests/pic-4.png'),
@@ -109,7 +110,7 @@ const Slider = ({ navigation }) => {
         itemWidth={Dimensions.get('window').width}
         onSnapToItem={(index) => onIndexChanged(index)}
         autoplay={true}
-        autoplayInterval={3000}
+        autoplayInterval={2000}
         
         loopClonesPerSide={images.length}
       />

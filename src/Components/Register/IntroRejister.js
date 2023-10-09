@@ -29,6 +29,7 @@ const IntroRejister = ({ navigation }) => {
 
   console.log('is clicked::>>L', isregistrationclicked)
   // console.log('is clicked::>>', isSigupClicked)
+  
 
   const handleLoginPress = () => {
   

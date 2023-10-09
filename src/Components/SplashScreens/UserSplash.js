@@ -4,7 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { StackActions, useNavigation } from '@react-navigation/native';
+import {  useNavigation } from '@react-navigation/native';
 
 const UserSplash = ({closeModal}) => {
   const [isOpen, setIsOpen] = useState(true);
