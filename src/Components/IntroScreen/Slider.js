@@ -70,7 +70,10 @@ const Slider = ({ navigation }) => {
   );
 
   const handleButtonPress = () => {
-    navigation.navigate('IntroRejister');
+   navigation.reset({
+    index: 0,
+    routes: [{ name: 'IntroRejister' }], // Replace 'Intro' with the actual name of your Intro screen
+  });
   };
 
   const renderDots = () => (

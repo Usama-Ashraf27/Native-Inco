@@ -15,16 +15,6 @@ const SplashScreen4 = ({ navigation }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      // Reset the navigation stack to only have 'IntroScreen' in it
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'IntroRejister' }],
-      });
-    }, 11000);
-  }, []);
-
-  useEffect(() => {
-    setTimeout(() => {
       navigation.navigate('Slider');
     }, 1200); 
   }, []);

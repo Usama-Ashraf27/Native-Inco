@@ -1,5 +1,6 @@
 // App.js
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SplashScreen1 from './src/Components/SplashScreens/SplashScreen1';
@@ -31,6 +32,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <>
+    <SafeAreaProvider>
       <StatusBar translucent backgroundColor="transparent"   barStyle="dark-content" /> 
     <NavigationContainer>
       <Stack.Navigator initialRouteName="SplashScreen2" screenOptions={{ headerShown: false, }}>
@@ -63,6 +65,7 @@ export default function App() {
 <Stack.Screen name='Circle' component={Circle}/>
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
     </>
   );
 };

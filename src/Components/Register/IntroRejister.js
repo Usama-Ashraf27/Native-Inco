@@ -5,6 +5,7 @@ import {
   View,
   ImageBackground,
   Image,
+  Alert,
   TouchableOpacity,
   ScrollView,  Animated,
 } from 'react-native';
@@ -16,6 +17,7 @@ import Header from '../IntroScreen/Header';
 import Login from './Login';
 import Registration from './Registration';
 import { useEffect } from 'react';
+import { BackHandler } from 'react-native';
 
 const IntroRejister = ({ navigation }) => {
   const [showLogin, setShowLogin] = useState(false);
@@ -26,10 +28,43 @@ const IntroRejister = ({ navigation }) => {
   const [animatedHeader] = useState(new Animated.Value(0));
   const [isSigupClicked, setIsSigupClicked] = useState(false)
   const [isregistrationclicked,setIsregistrationClicked]=useState(false)
+  
+
 
   console.log('is clicked::>>L', isregistrationclicked)
   // console.log('is clicked::>>', isSigupClicked)
   
+  useEffect(() => {
+    const backAction = () => {
+      // Show an exit confirmation dialog
+      Alert.alert(
+        'Exit App',
+        'Are you sure you want to exit?',
+        [
+          {
+            text: 'Cancel',
+            onPress: () => null,
+            style: 'cancel',
+          },
+          {
+            text: 'Exit',
+            onPress: () => BackHandler.exitApp(),
+          },
+        ],
+        { cancelable: false }
+      );
+  
+ 
+      return true;
+    };
+  
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+  
+
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   const handleLoginPress = () => {
   
